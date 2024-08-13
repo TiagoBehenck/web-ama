@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:test": "vite --port 50789 --mode test",
     "build": "tsc -b && vite build",
     "format": "biome format --write ./src/*",
     "lint": "biome lint --write ./src/*",
@@ -13,19 +14,23 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.51.23",
+    "axios": "^1.7.3",
     "lucide-react": "^0.424.0",
     "react": "19.0.0-rc-e948a5ac-20240807",
     "react-dom": "19.0.0-rc-e948a5ac-20240807",
     "react-router-dom": "^6.26.0",
-    "sonner": "^1.5.0"
+    "sonner": "^1.5.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
-    "@types/react": "npm:types-react@rc",
+    "@playwright/test": "^1.46.0",
     "@types/node": "^22.1.0",
+    "@types/react": "npm:types-react@rc",
     "@types/react-dom": "npm:types-react-dom@rc",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
+    "msw": "^2.3.0-ws.rc-7",
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.7",
     "typescript": "^5.2.2",
@@ -34,5 +39,10 @@
   "overrides": {
     "@types/react": "npm:types-react@rc",
     "@types/react-dom": "npm:types-react-dom@rc"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

@@ -1,51 +1,51 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
 
-import type { GetRoomMessagesResponse } from "@/http/get-room-messages";
+import type { GetRoomMessagesResponse } from '@/http/get-room-messages'
 
 enum WebSocketMessageKind {
-  message_created = "message_created",
-  message_answered = "message_answered",
-  message_reaction_increased = "message_reaction_increased",
-  message_reaction_decreased = "message_reaction_decreased",
+  message_created = 'message_created',
+  message_answered = 'message_answered',
+  message_reaction_increased = 'message_reaction_increased',
+  message_reaction_decreased = 'message_reaction_decreased',
 }
 
 type WebhookMessage =
   | {
-      kind: WebSocketMessageKind.message_created;
-      value: { id: string; message: string };
+      kind: WebSocketMessageKind.message_created
+      value: { id: string; message: string }
     }
   | { kind: WebSocketMessageKind.message_answered; value: { id: string } }
   | {
-      kind: WebSocketMessageKind.message_reaction_increased;
-      value: { id: string; count: number };
+      kind: WebSocketMessageKind.message_reaction_increased
+      value: { id: string; count: number }
     }
   | {
-      kind: WebSocketMessageKind.message_reaction_decreased;
-      value: { id: string; count: number };
-    };
+      kind: WebSocketMessageKind.message_reaction_decreased
+      value: { id: string; count: number }
+    }
 
 type UseMessagesWebSocketsParams = {
-  roomId: string;
-};
+  roomId: string
+}
 
 export function useMessagesWebSockets({ roomId }: UseMessagesWebSocketsParams) {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://localhost:8080/subscribe/${roomId}`);
+    const ws = new WebSocket(`ws://localhost:8080/subscribe/${roomId}`)
 
     ws.onopen = () => {
-      console.log("Connected to websocket!");
-    };
+      console.log('Connected to websocket!')
+    }
 
     ws.onclose = () => {
-      console.log("Disconnected from websocket!");
-    };
+      console.log('Disconnected from websocket!')
+    }
 
     function handleMessageCreated(data: WebhookMessage) {
       queryClient.setQueryData<GetRoomMessagesResponse>(
-        ["messages", roomId],
+        ['messages', roomId],
         (state) => ({
           messages: [
             ...(state?.messages ?? []),
@@ -57,12 +57,12 @@ export function useMessagesWebSockets({ roomId }: UseMessagesWebSocketsParams) {
             },
           ],
         }),
-      );
+      )
     }
 
     function handleMessageAnswered(data: WebhookMessage) {
       queryClient.setQueryData<GetRoomMessagesResponse>(
-        ["messages", roomId],
+        ['messages', roomId],
         (state) => ({
           messages:
             state?.messages.map((message) =>
@@ -71,12 +71,12 @@ export function useMessagesWebSockets({ roomId }: UseMessagesWebSocketsParams) {
                 : message,
             ) ?? [],
         }),
-      );
+      )
     }
 
     function handleReactionChange(data: WebhookMessage) {
       queryClient.setQueryData<GetRoomMessagesResponse>(
-        ["messages", roomId],
+        ['messages', roomId],
         (state) => ({
           messages:
             state?.messages.map((message) =>
@@ -88,7 +88,7 @@ export function useMessagesWebSockets({ roomId }: UseMessagesWebSocketsParams) {
                 : message,
             ) ?? [],
         }),
-      );
+      )
     }
 
     const messageHandlers: Record<
@@ -99,18 +99,18 @@ export function useMessagesWebSockets({ roomId }: UseMessagesWebSocketsParams) {
       [WebSocketMessageKind.message_answered]: handleMessageAnswered,
       [WebSocketMessageKind.message_reaction_increased]: handleReactionChange,
       [WebSocketMessageKind.message_reaction_decreased]: handleReactionChange,
-    };
+    }
 
     ws.onmessage = (event) => {
-      const data: WebhookMessage = JSON.parse(event.data);
-      const handler = messageHandlers[data.kind];
+      const data: WebhookMessage = JSON.parse(event.data)
+      const handler = messageHandlers[data.kind]
       if (handler) {
-        handler(data);
+        handler(data)
       }
-    };
+    }
 
     return () => {
-      ws.close();
-    };
-  }, [roomId, queryClient]);
+      ws.close()
+    }
+  }, [roomId, queryClient])
 }

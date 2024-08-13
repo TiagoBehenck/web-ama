@@ -1,28 +1,28 @@
-import { Share2 } from "lucide-react";
-import { useParams } from "react-router-dom";
-import { toast } from "sonner";
+import { Share2 } from 'lucide-react'
+import { useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 
-import amaLogo from "@/assets/ama-logo.svg";
-import { CreateMessageForm } from "@/components/create-message-form";
-import { Messages } from "@/components/messages";
-import { Suspense } from "react";
+import amaLogo from '@/assets/ama-logo.svg'
+import { CreateMessageForm } from '@/components/create-message-form'
+import { Messages } from '@/components/messages'
+import { Suspense } from 'react'
 
 type Params = {
-  roomId: string;
-};
+  roomId: string
+}
 
 export function Room() {
-  const { roomId } = useParams<Params>();
+  const { roomId } = useParams<Params>()
 
   function handleShareRoom() {
-    const url = window.location.href.toLowerCase();
+    const url = window.location.href.toLowerCase()
 
     if (navigator.share !== undefined && navigator.canShare()) {
-      navigator.share({ url });
+      navigator.share({ url })
     } else {
-      navigator.clipboard.writeText(url);
+      navigator.clipboard.writeText(url)
 
-      toast.info("O link da sala foi copiado para a área de transferência");
+      toast.info('O link da sala foi copiado para a área de transferência')
     }
   }
 
@@ -53,5 +53,5 @@ export function Room() {
         <Messages />
       </Suspense>
     </div>
-  );
+  )
 }

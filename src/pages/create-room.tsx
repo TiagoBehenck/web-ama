@@ -1,27 +1,27 @@
-import { ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ArrowRight } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
-import { createRoom } from "@/http/create-room";
+import { createRoom } from '@/http/create-room'
 
-import amaLogo from "@/assets/ama-logo.svg";
-import { toast } from "sonner";
+import amaLogo from '@/assets/ama-logo.svg'
+import { toast } from 'sonner'
 
 export function CreateRoom() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   async function handleCreateRoom(data: FormData) {
-    const theme = data.get("theme")?.toString();
+    const theme = data.get('theme')?.toString()
 
     if (!theme) {
-      return;
+      return
     }
 
     try {
-      const { roomId } = await createRoom({ theme });
+      const { roomId } = await createRoom({ theme })
 
-      navigate(`/room/${roomId}`);
+      navigate(`/room/${roomId}`)
     } catch {
-      toast.error("Falha ao criar sala");
+      toast.error('Falha ao criar sala')
     }
   }
 
@@ -58,5 +58,5 @@ export function CreateRoom() {
         </form>
       </div>
     </main>
-  );
+  )
 }

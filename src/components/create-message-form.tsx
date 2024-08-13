@@ -1,33 +1,33 @@
-import { ArrowRight } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { ArrowRight } from 'lucide-react'
+import { useParams } from 'react-router-dom'
 
-import { createMessage } from "@/http/create-message";
-import { toast } from "sonner";
+import { createMessage } from '@/http/create-message'
+import { toast } from 'sonner'
 
 export function CreateMessageForm() {
-  const { roomId } = useParams<{ roomId: string }>();
+  const { roomId } = useParams<{ roomId: string }>()
 
   if (!roomId) {
-    throw new Error("Messages component must be used inside a room route");
+    throw new Error('Messages component must be used inside a room route')
   }
 
   async function createMessageAction(data: FormData) {
-    const message = data.get("message")?.toString();
+    const message = data.get('message')?.toString()
 
     if (!message || !roomId) {
-      return;
+      return
     }
 
     try {
-      await createMessage({ message, roomId });
-      toast.success("Mensagem criada com sucesso!");
+      await createMessage({ message, roomId })
+      toast.success('Mensagem criada com sucesso!')
     } catch {
-      toast.error("Ocorreu um erro ao criar a mensagem!");
+      toast.error('Ocorreu um erro ao criar a mensagem!')
     }
   }
 
   if (!roomId) {
-    throw new Error("Messages component must be used inside a room route");
+    throw new Error('Messages component must be used inside a room route')
   }
 
   return (
@@ -52,5 +52,5 @@ export function CreateMessageForm() {
         <ArrowRight className="size-4" />
       </button>
     </form>
-  );
+  )
 }

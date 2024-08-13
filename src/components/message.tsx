@@ -1,17 +1,17 @@
-import { ArrowUp } from "lucide-react";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { toast } from "sonner";
+import { ArrowUp } from 'lucide-react'
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 
-import { createMessageReaction } from "@/http/create-message-reaction";
-import { removeMessageReaction } from "@/http/remove-message-reaction";
+import { createMessageReaction } from '@/http/create-message-reaction'
+import { removeMessageReaction } from '@/http/remove-message-reaction'
 
 type MessageProps = {
-  messageId: string;
-  text: string;
-  amountOfReactions: number;
-  answered?: boolean;
-};
+  messageId: string
+  text: string
+  amountOfReactions: number
+  answered?: boolean
+}
 
 export function Message({
   messageId,
@@ -19,39 +19,40 @@ export function Message({
   amountOfReactions,
   answered = false,
 }: MessageProps) {
-  const { roomId } = useParams<{ roomId: string }>();
-  const [hasReacted, setHasReacted] = useState(false);
+  const { roomId } = useParams<{ roomId: string }>()
+  const [hasReacted, setHasReacted] = useState(false)
 
   if (!roomId) {
-    return;
+    return
   }
 
   async function createMessageReactionAction() {
     if (!roomId) {
-      return;
+      return
     }
 
     try {
-      await createMessageReaction({ roomId, messageId });
+      await createMessageReaction({ roomId, messageId })
+      toast.success('Mensagem curtida com sucesso!')
     } catch {
-      toast.error("Não foi possível curtir a pergunta");
+      toast.error('Não foi possível curtir a pergunta')
     }
 
-    setHasReacted(true);
+    setHasReacted(true)
   }
 
   async function removeMessageReactionAction() {
     if (!roomId) {
-      return;
+      return
     }
 
     try {
-      await removeMessageReaction({ roomId, messageId });
+      await removeMessageReaction({ roomId, messageId })
     } catch {
-      toast.error("Não foi possível remover a curtida");
+      toast.error('Não foi possível remover a curtida')
     }
 
-    setHasReacted(false);
+    setHasReacted(false)
   }
 
   return (
@@ -81,5 +82,5 @@ export function Message({
         </button>
       )}
     </li>
-  );
+  )
 }

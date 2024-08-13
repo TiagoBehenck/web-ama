@@ -6,7 +6,7 @@
 	"formatter": {
 		"enabled": true,
 		"formatWithErrors": false,
-		"ignore": [],
+		"ignore": ["public/mockServiceWorker.js"],
 		"attributePosition": "auto",
 		"indentStyle": "space",
 		"indentWidth": 2,
@@ -16,6 +16,12 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single",
+			"semicolons": "asNeeded"
 		}
 	}
 }
